@@ -20,6 +20,8 @@ Each configuration file shoould specify a certain configuration using all files.
 Features, which are not included in the configuration, should be prefix with `not_`.  
 **Important:** The directoy with configurations should not contain any other files than configuration files, because the program featurelocatin will try to interpret them as configuration files.
 
+## Output Format
+
 The output file describes for each elementary subset of the given configuration how it can be computed  and to which extent this can be done.
 Each subset is printed in a new line.
 If a subset can be computed precisely the line start with `+++ `, otherwise it starts with `--- `. 
