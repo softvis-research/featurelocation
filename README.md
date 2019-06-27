@@ -2,7 +2,7 @@
 
 Calculates all elementary sets for configurations of the [SPLC feature location challenge 2019](https://variability-challenges.github.io/2018/ArgoUMLSPL/index.html).
 
-Author: Ulrich Eisenecker
+Author: [Ulrich Eisenecker](http://home.uni-leipzig.de/svis/Research%20Group/#UlrichEisenecker)
 
 ## Compilation
 
