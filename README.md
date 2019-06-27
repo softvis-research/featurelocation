@@ -16,8 +16,8 @@ Warnings about comparing integer expressions of different signedness can be safe
 Execute `./featurelocation PATH_TO_CONFIG_DIR PATH_TO_OUTPUT_FILE`
 
 `PATH_TO_CONFIG_DIR` should contain all configurations of a given scenario.
-Each configuration file should specify a certain configuration using all files.
-Features, which are not included in the configuration, should be prefix with `not_`.  
+Each configuration file should specify a certain configuration using all features.
+Features, which are not included in the configuration, are prefixed with `not_`.  
 **Important:** The directory with configurations should not contain any other files than configuration files, because the program will try to interpret them as configuration files.
 
 ## Output Format
