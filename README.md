@@ -17,31 +17,52 @@ Execute `./featurelocation PATH_TO_CONFIG_DIR PATH_TO_OUTPUT_FILE`
 
 `PATH_TO_CONFIG_DIR` should contain all configurations of a given scenario.
 Each configuration file should specify a certain configuration using all features.
-Features, which are not included in the configuration, are prefixed with `not_`.  
+Features, which are not included in the configuration, can be simply omitted in the config file, or they may be prefixed with `not_`.  
 **Important:** The directory with configurations should not contain any other files than configuration files, because the program will try to interpret them as configuration files.
+
+Here is an example of a config file named `config.001` using a consequent `not_`-specification to explicitly express, that features `A`, `B`, and `C` are not present:
+`not_A`
+`not_B`
+`not_C`
+The next example, the file name is `config.004` contains only one line, namely `C`.
+This indicates, that feaure `C` ist present, while all non-specified features are absent.
 
 ## Output Format
 
 The output file describes for each elementary subset of the given configuration how it can be computed  and to which extent this can be done.
 Each subset is printed in a new line.
-If a subset can be computed precisely the line start with `+++ `, otherwise it starts with `--- `. 
-Afterwards it follows an internal ordinal number for the subsets starting with zero. 
-After that the subset is specified.
+If a subset can be computed precisely the line start with `+++ `, otherwise it starts with `--- `.  
+Here is an example line of an elementary subset, which can be precisely computed:  
+`+++ 4 { core }  = INTERSECTION ( { core } ) \ UNION ( ) = ( { core } )`
 
-Any set enclosed in `[]` denotes a set which only exists if its elements (= feature names) are present in the given configuration. 
-This corresponds to `IF (feature_a AND feature_b) ...` in the code.
-Any set enclosed in `{}` denotes a set with features as elements. 
-If the set contains more than one element, this corresponds to `IF (feature_a OR feature_b) ...` in the code.
-Sets enclosed in `()` contain other sets as elements and correspond to systems. 
-In this case the system is described in terms of all elementary subsets it consists of.
+The next token after `+++` is  an internal ordinal number identifying the subsets.
+The first subset has the internal ordinal number `0`.
+This number is followed by a specification of this subset, here `{ core }`.
+The element name `core` is reserved for the core system without any feature activated.
+After the equal sign, `=`, it is described how to compute the subset, which is pretty simple here.
+The left term `INTERSECTION ( { core } )` means, that the systems contained in the set of systems, which is embraced by `()`, have to be intersected. Since the only element of this systems set is „{ core }“, this is a very simple operation. Now follows the operator for set difference, `\`.
+The right term is a list of systems, which have to be united.
+Here this list ist empty.
+Again, an equal sign follows.
+Eventually the set of systems is printed.
+If the subset of interest can be precisely computed, this systems set contains only one element, namely the subset itself.
+Now we take a look at an example line with an elementary subset, which can not be exactly computed:  
+`--- 0 [ 3 2 ]  = INTERSECTION ( [ 3 2 ] [ 3 2 1 ] [ 3 1 ] [ 2 1 ] { core } { 1 } { 1 2 } { 1 2 3 } { 1 3 } { 2 } { 2 3 } { 3 } ) \ UNION ( { core } { 1 } { 1 2 } { 1 2 3 } { 1 3 } { 2 } { 2 3 } { 3 } ) = ( [ 3 2 ] [ 3 2 1 ] [ 3 1 ] [ 2 1 ] )`
 
-Well, after the ordinal number the corresponding elementary subset is printed. 
-Then an equal signs follows.
-Obviously, this is only adequate, when the line starts with `+++ `.
-Afterwards the keyword `INTERSECTION` all systems are printed which contain the specific subset and which thus should be intersected. 
-Then, all corresponding systems are printed. 
-The intersection of these systems has to be set diminished (operator `\`) by all the systems following the keyword `UNION`. 
-These systems do not contain the specific subset, hence, their union has to be computed.
-After that follows again an equal sign followed by the result set.
-If the result set contains exactly one element, the specific subset ca be exactly determined in the given scenario defined by its configurations.
-If it has more than one element, the specific subset is among these elements, but can not be exactly computed.
+The interesting subset is `[ 3 2 ]`. 
+This set is enclosed in square brackets which indicates, that this set exists only, if both features, `3` and `2`, are present in the given system.
+It refers to code, which is specific to the interaction of feature `3` and feature `2`.
+It follows the set of systems containing this special subset. 
+All of these systes have to be intersected. 
+From the resulting set the union of all systems not containing this special subset will be subtracted. 
+Obviously, the resulting contains not only the specific subset, but three more sets. 
+This means, that this set comes closest to the specific subset, but the subset itself can not be precisely computed.
+Two more explanations: The set `{ 1 3 }` denotes code which is included for either feature `1`, for feature `3`, or for both features.
+The set `{ 1 }` refers  to code which is exclusively specific to feature `1`.  
+To summarize:  
+`+++` starts a line of an elementary subset, which can be precisely computed.  
+`---` starts a line of an eleentary subset, whicht can not be precisely computed.  
+`{ }` curly brackets enclose ordinary sets of pure feature-code or or-feature-code.  
+`[  ]` square brackets enclose sets of code specific to interaction of certain features.  
+`()` parentheses enclose sets of systems.
+
